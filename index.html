@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Agromin Muncher Analysis Dashboard</title>
+  <link rel="stylesheet" href="assets/css/styles.css">
+  
+  <!-- External libraries -->
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@9.4.3/dist/mermaid.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <!-- Dashboard Header -->
+  <header class="dashboard-header">
+    <div class="container">
+      <h1 class="dashboard-title">Agromin Muncher Analysis Dashboard</h1>
+    </div>
+  </header>
+  
+  <!-- Dashboard Content -->
+  <div class="container">
+    <!-- Top Summary Section -->
+    <div class="summary-section">
+      <h2>Key Findings</h2>
+      <div class="key-metrics">
+        <div class="metric">
+          <h3>Water Required</h3>
+          <p class="metric-value">0.5 gal</p>
+          <p class="metric-description">water per gallon of MJ output</p>
+        </div>
+        
+        <div class="metric">
+          <h3>Output Production</h3>
+          <p class="metric-value">1,600-1,800 gal</p>
+          <p class="metric-description">of MJ per ton of waste</p>
+        </div>
+        
+        <div class="metric">
+          <h3>Organic Matter</h3>
+          <p class="metric-value">3.5-4.5%</p>
+          <p class="metric-description">in final MJ product</p>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Visualization Grid -->
+    <div class="dashboard-container">
+      <!-- Water Flow Diagram -->
+      <div class="dashboard-card">
+        <h2>Water Flow Through System</h2>
+        <div class="chart-container">
+          <div id="water-flow-diagram" class="mermaid"></div>
+        </div>
+      </div>
+      
+      <!-- Water Balance Chart -->
+      <div class="dashboard-card">
+        <h2>Water Balance Analysis</h2>
+        <div class="chart-container">
+          <canvas id="water-balance-chart"></canvas>
+        </div>
+      </div>
+      
+      <!-- Organic Matter Concentration -->
+      <div class="dashboard-card">
+        <h2>Organic Matter Concentration</h2>
+        <div class="chart-container">
+          <canvas id="organic-matter-chart"></canvas>
+        </div>
+      </div>
+      
+      <!-- Feedstock Composition -->
+      <div class="dashboard-card">
+        <h2>Feedstock Composition Impact</h2>
+        <div class="chart-container">
+          <canvas id="feedstock-chart"></canvas>
+        </div>
+      </div>
+      
+      <!-- System Performance -->
+      <div class="dashboard-card">
+        <h2>System Performance Over Time</h2>
+        <div class="chart-container">
+          <canvas id="performance-chart"></canvas>
+        </div>
+      </div>
+      
+      <!-- Water-Organic Matter Relationship -->
+      <div class="dashboard-card">
+        <h2>Water Efficiency vs. Organic Matter</h2>
+        <div class="chart-container">
+          <canvas id="efficiency-matter-chart"></canvas>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Report Section -->
+    <div class="report-section">
+      <h2>About This Dashboard</h2>
+      <p>This interactive dashboard presents the key findings from the Agromin Muncher trial conducted from September to December 2024. The analysis focuses on water balance, organic matter concentration, and system efficiency improvements over time.</p>
+      <p>For the full analysis report, please contact your Agromin representative.</p>
+    </div>
+  </div>
+  
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <p>&copy; 2025 Agromin Muncher Analysis</p>
+    </div>
+  </footer>
+  
+  <!-- Load visualization scripts -->
+  <script src="assets/js/water-flow-diagram.js"></script>
+  <script src="assets/js/water-balance-chart.js"></script>
+  <script src="assets/js/organic-matter-chart.js"></script>
+  <script src="assets/js/feedstock-chart.js"></script>
+  <script src="assets/js/performance-chart.js"></script>
+  <script src="assets/js/efficiency-matter-chart.js"></script>
+</body>
+</html>
