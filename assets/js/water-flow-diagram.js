@@ -1,39 +1,39 @@
 // Initialize Mermaid when the document is loaded
 document.addEventListener('DOMContentLoaded', function() {
-  // Initialize Mermaid with configuration
+  // Initialize Mermaid with basic configuration
   mermaid.initialize({
-    startOnLoad: true,
+    startOnLoad: false,  // We'll render manually
     theme: 'default',
-    flowchart: {
-      useMaxWidth: true,
-      htmlLabels: true,
-      curve: 'cardinal',
-    }
+    securityLevel: 'loose'
   });
   
-  // Define the flow diagram
-  const diagram = `
-  flowchart TD
-    A[Fresh Water Input] -->|Initial Fill & Regular Additions| B[Homogenizer]
-    F[Feedstock] -->|Contributes Moisture| B
-    B -->|Send to Digester ~50 gal| C[Digester]
-    C -->|Drain to Barrel| D[Blue Barrel]
-    D -->|Liquid| E[Tote Collection]
-    D -->|Solids| G[Solids Collection]
-    C <-->|Recirculation| H[Aeration Tank]
-    H -->|Transfer to Balance| B
-    C -->|Evaporation| I[Water Loss]
-    H -->|Evaporation| I
-    
-    subgraph System Water Balance
-    J[Total Input: 800-1350 gal/ton] --> K[Output: ~250 gal/ton]
-    J --> L[Evaporation Loss: 550-1100 gal/ton]
-    end
-  `;
+  // Define a much simpler flowchart
+  const diagram = `graph TD
+    A[Fresh Water Input] --> B[Homogenizer]
+    F[Feedstock] --> B
+    B --> C[Digester]
+    C --> D[Blue Barrel]
+    D --> E[Tote Collection]
+    D --> G[Solids Collection]
+    C <--> H[Aeration Tank]
+    H --> B
+    C --> I[Water Loss]
+    H --> I`;
   
   // Insert the diagram into the container
   document.getElementById('water-flow-diagram').innerHTML = diagram;
   
-  // Render the diagram
-  mermaid.init(undefined, '.mermaid');
+  // Try-catch block to help with debugging
+  try {
+    // Render the diagram
+    mermaid.init(undefined, '.mermaid');
+  } catch (e) {
+    console.error('Mermaid rendering error:', e);
+    document.getElementById('water-flow-diagram').innerHTML = 
+      `<div style="color: #721c24; background: #f8d7da; padding: 10px; border-radius: 5px;">
+        <p><strong>Note:</strong> The water flow diagram couldn't be rendered automatically.</p>
+        <p>The system processes water and organic feedstock through homogenization, digestion, 
+        and aeration, with significant water conservation through recirculation.</p>
+      </div>`;
+  }
 });
