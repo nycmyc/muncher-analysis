@@ -1,47 +1,81 @@
 document.addEventListener('DOMContentLoaded', function() {
-  // Instead of using Mermaid, let's create a simple SVG directly
-  const waterFlowSVG = `
-    <svg width="100%" height="300" viewBox="0 0 500 300" xmlns="http://www.w3.org/2000/svg">
-      <!-- Boxes -->
-      <rect x="100" y="30" width="100" height="40" rx="5" fill="#e6e6fa" stroke="#6a5acd" stroke-width="2"/>
-      <rect x="300" y="30" width="100" height="40" rx="5" fill="#e6e6fa" stroke="#6a5acd" stroke-width="2"/>
-      <rect x="200" y="120" width="100" height="40" rx="5" fill="#e6e6fa" stroke="#6a5acd" stroke-width="2"/>
-      <rect x="200" y="210" width="100" height="40" rx="5" fill="#e6e6fa" stroke="#6a5acd" stroke-width="2"/>
-      <rect x="80" y="210" width="100" height="40" rx="5" fill="#e6e6fa" stroke="#6a5acd" stroke-width="2"/>
-      <rect x="320" y="210" width="100" height="40" rx="5" fill="#e6e6fa" stroke="#6a5acd" stroke-width="2"/>
-      
-      <!-- Text labels -->
-      <text x="150" y="55" text-anchor="middle" fill="#333" font-family="Arial" font-size="12">Fresh Water</text>
-      <text x="350" y="55" text-anchor="middle" fill="#333" font-family="Arial" font-size="12">Feedstock</text>
-      <text x="250" y="145" text-anchor="middle" fill="#333" font-family="Arial" font-size="12">Homogenizer</text>
-      <text x="250" y="235" text-anchor="middle" fill="#333" font-family="Arial" font-size="12">Digester</text>
-      <text x="130" y="235" text-anchor="middle" fill="#333" font-family="Arial" font-size="12">Blue Barrel</text>
-      <text x="370" y="235" text-anchor="middle" fill="#333" font-family="Arial" font-size="12">Aeration Tank</text>
-      
-      <!-- Arrows -->
-      <path d="M150 70 L215 120" fill="none" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)"/>
-      <path d="M350 70 L285 120" fill="none" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)"/>
-      <path d="M250 160 L250 210" fill="none" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)"/>
-      <path d="M200 235 L180 235" fill="none" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)"/>
-      <path d="M300 235 L320 235" fill="none" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)"/>
-      <path d="M370 210 L290 160" fill="none" stroke="#333" stroke-width="2" marker-end="url(#arrowhead)"/>
-      
-      <!-- Arrow definition -->
-      <defs>
-        <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
-          <polygon points="0 0, 10 3.5, 0 7" fill="#333"/>
-        </marker>
-      </defs>
-    </svg>
-    <div style="text-align: center; margin-top: 10px; font-size: 12px; color: #555;">
-      <p>Water flow through the Muncher system with significant recirculation for efficiency.</p>
-    </div>
-  `;
+  // Initialize Mermaid with enhanced configuration for better sizing
+  mermaid.initialize({
+    startOnLoad: false,
+    theme: 'default',
+    securityLevel: 'loose',
+    flowchart: {
+      useMaxWidth: true,
+      htmlLabels: true,
+      curve: 'basis'
+    },
+    themeVariables: {
+      fontSize: '14px'
+    }
+  });
   
-  // Insert the SVG into the container
-  const container = document.getElementById('water-flow-diagram');
-  if (container) {
-    container.innerHTML = waterFlowSVG;
-    container.className = "svg-container";
+  // Define a simpler flowchart with explicit sizing
+  const diagram = `graph TD
+    classDef default fill:#f0f4ff,stroke:#9370db,stroke-width:1px;
+    
+    A[Fresh Water Input] --> B[Homogenizer]
+    F[Feedstock] --> B
+    B --> C[Digester]
+    C --> D[Blue Barrel]
+    D --> E[Tote Collection]
+    D --> G[Solids Collection]
+    C <--> H[Aeration Tank]
+    H --> B
+    C --> I[Water Loss]
+    H --> I
+    
+    class A,B,C,D,E,F,G,H,I default;`;
+  
+  // Insert the diagram into the container
+  document.getElementById('water-flow-diagram').innerHTML = diagram;
+  
+  // Create a wrapper function to handle rendering with proper sizing
+  function renderMermaidWithSizing() {
+    try {
+      // Render the diagram
+      mermaid.init(undefined, '.mermaid');
+      
+      // Get the SVG element created by Mermaid
+      setTimeout(function() {
+        const svg = document.querySelector('#water-flow-diagram svg');
+        if (svg) {
+          // Set explicit dimensions and viewBox
+          svg.setAttribute('width', '100%');
+          svg.setAttribute('height', '100%');
+          svg.style.maxHeight = '300px';
+          
+          // Add responsive scaling
+          if (!svg.getAttribute('viewBox')) {
+            const bbox = svg.getBBox();
+            svg.setAttribute('viewBox', `0 0 ${bbox.width} ${bbox.height}`);
+          }
+        }
+      }, 100);
+    } catch (e) {
+      console.error('Mermaid rendering error:', e);
+      document.getElementById('water-flow-diagram').innerHTML = 
+        `<div style="color: #721c24; background: #f8d7da; padding: 10px; border-radius: 5px;">
+          <p><strong>Note:</strong> The water flow diagram couldn't be rendered automatically.</p>
+          <p>The system processes water and organic feedstock through homogenization, digestion, 
+          and aeration, with significant water conservation through recirculation.</p>
+        </div>`;
+    }
   }
+  
+  // Call the rendering function
+  renderMermaidWithSizing();
+  
+  // Re-render on window resize for better responsiveness
+  window.addEventListener('resize', function() {
+    const container = document.getElementById('water-flow-diagram');
+    if (container) {
+      container.innerHTML = diagram;
+      renderMermaidWithSizing();
+    }
+  });
 });
