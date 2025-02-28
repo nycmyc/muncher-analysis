@@ -41,28 +41,15 @@ document.addEventListener('DOMContentLoaded', function() {
             display: true,
             text: 'Temperature and pH Over Trial Period',
             font: {
-              size: 16,
+              size: 14,
               weight: 'bold'
             }
           },
-          tooltip: {
-            mode: 'index',
-            intersect: false
-          },
           legend: {
-            position: 'bottom',
-            labels: {
-              boxWidth: 12
-            }
+            position: 'bottom'
           }
         },
         scales: {
-          x: {
-            title: {
-              display: true,
-              text: 'Date'
-            }
-          },
           yTemperature: {
             type: 'linear',
             display: true,
@@ -92,26 +79,33 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     });
     
-    // Create a proper container for the efficiency chart
-    const chartContainer = document.querySelector('#performance-chart').parentNode;
-    const efficiencyDiv = document.createElement('div');
-    efficiencyDiv.className = 'chart-container';
-    efficiencyDiv.id = 'efficiency-chart-container';
-    efficiencyDiv.style.marginTop = '60px';
-    efficiencyDiv.style.position = 'relative';
+    // Create a completely separate container for the efficiency chart
+    const cardContainer = document.querySelector('#performance-chart').parentNode;
+    
+    // Create a divider 
+    const divider = document.createElement('div');
+    divider.style.borderTop = '1px solid #eee';
+    divider.style.margin = '30px 0 20px';
+    cardContainer.appendChild(divider);
+    
+    // Create a heading for the efficiency chart
+    const efficiencyTitle = document.createElement('h3');
+    efficiencyTitle.textContent = 'System Efficiency Improvement Over Time';
+    efficiencyTitle.style.textAlign = 'center';
+    efficiencyTitle.style.color = '#2c3e50';
+    efficiencyTitle.style.margin = '20px 0';
+    cardContainer.appendChild(efficiencyTitle);
+    
+    // Create new container for efficiency chart
+    const efficiencyContainer = document.createElement('div');
+    efficiencyContainer.style.height = '250px';
+    efficiencyContainer.style.marginTop = '10px';
+    efficiencyContainer.style.position = 'relative';
     
     const efficiencyCanvas = document.createElement('canvas');
     efficiencyCanvas.id = 'efficiency-chart';
-    efficiencyDiv.appendChild(efficiencyCanvas);
-    chartContainer.appendChild(efficiencyDiv);
-    
-    // Add a title for the efficiency chart
-    const title = document.createElement('h3');
-    title.textContent = 'System Efficiency Improvement Over Time';
-    title.style.textAlign = 'center';
-    title.style.marginBottom = '15px';
-    title.style.color = '#2c3e50';
-    efficiencyDiv.insertBefore(title, efficiencyCanvas);
+    efficiencyContainer.appendChild(efficiencyCanvas);
+    cardContainer.appendChild(efficiencyContainer);
     
     // Efficiency data
     const efficiencyData = {
@@ -141,7 +135,7 @@ document.addEventListener('DOMContentLoaded', function() {
       ]
     };
     
-    // Create efficiency chart with proper positioning
+    // Create efficiency chart
     const efficiencyCtx = document.getElementById('efficiency-chart').getContext('2d');
     const efficiencyChart = new Chart(efficiencyCtx, {
       type: 'line',
@@ -151,11 +145,7 @@ document.addEventListener('DOMContentLoaded', function() {
         maintainAspectRatio: false,
         plugins: {
           title: {
-            display: false  // Title is now an HTML element
-          },
-          tooltip: {
-            mode: 'index',
-            intersect: false
+            display: false // Using H3 element instead
           },
           legend: {
             position: 'bottom',
@@ -177,5 +167,20 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   } catch (error) {
     console.error('Error creating performance charts:', error);
+    
+    // Fallback content if charts fail
+    const container = document.querySelector('#performance-chart').parentNode;
+    container.innerHTML = `
+      <h2>System Performance Over Time</h2>
+      <div style="padding: 20px; text-align: center;">
+        <p>The system showed significant performance improvements over the trial period:</p>
+        <ul style="text-align: left; display: inline-block;">
+          <li>Temperature maintained between 29-32°C for optimal operation</li>
+          <li>pH stabilized at 6.0-6.5 for best bacterial activity</li>
+          <li>Water efficiency improved from 1.17 to 0.48 gal/gal</li>
+          <li>Output increased from 1,200 to 1,780 gal/ton</li>
+        </ul>
+      </div>
+    `;
   }
 });
